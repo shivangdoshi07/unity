@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\QuaterController.cs">
+    <Files>
+      <File FileName="Assets\FakeQuaterController.cs" Line="13" Column="2" />
+      <File FileName="Assets\Drag.cs" Line="28" Column="6" />
+      <File FileName="Assets\GumballMachine.cs" Line="14" Column="3" />
+      <File FileName="Assets\CoinController.cs" Line="15" Column="9" />
+      <File FileName="Assets\QuaterController.cs" Line="13" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
