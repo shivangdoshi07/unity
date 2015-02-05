@@ -2,14 +2,13 @@
 using System.Collections;
 
 public class GreenPickerController : PickerController {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
+	public GameObject gpa;
+	public static bool askedToGive = false;
 	// Update is called once per frame
-	void Update () {
-	
+	void FixedUpdate () {
+		if (askedToGive) {
+			askedToGive = false;
+			base.createAGum(gpa,Color.green);
+		}
 	}
 }

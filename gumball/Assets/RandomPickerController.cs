@@ -2,14 +2,15 @@
 using System.Collections;
 
 public class RandomPickerController : PickerController {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
+	public GameObject rpa;
+	public static bool askedToGive = false;
 	// Update is called once per frame
-	void Update () {
-	
+	void FixedUpdate () {
+		if (askedToGive) {
+			Color thingyColor=new Color(Random.value,Random.value,Random.value);
+			askedToGive = false;
+			base.createAGum(rpa,thingyColor);
+		}
 	}
 }
+

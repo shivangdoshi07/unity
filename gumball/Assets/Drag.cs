@@ -13,19 +13,17 @@ public class Drag : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButton(0)){
+		if(Input.GetMouseButtonDown(0)){
 			var ray = camera.ScreenPointToRay(Input.mousePosition);
 			var hit  = Physics.Raycast(ray.origin,ray.direction, out rayHit);
 			if(hit){
 				collideObj = rayHit.collider.gameObject;
-				distance = rayHit.distance;
-//				Debug.Log (collideObj.name);
 				if(collideObj.tag == "Coin"){
-					posObj = ray.origin + distance*ray.direction;
-					float moveHorizontal = -0.58f;
-					float moveVertical = 1.0f;
-					Vector3 movement = new Vector3 (moveHorizontal,0.0f,moveVertical);
-					collideObj.rigidbody.AddForce (movement * 1000 * Time.deltaTime);
+					Vector3 movement = new Vector3 (-0.58f,0.0f,1.0f);
+					collideObj.rigidbody.AddForce (movement * 3000 * Time.deltaTime);
+				}
+				if(collideObj.tag == "GumballMachine"){
+					GumballMachine.hasCrankTurned = true;
 				}
 			}
 		}
