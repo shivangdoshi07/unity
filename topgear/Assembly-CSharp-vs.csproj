@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\JCar.cs" />
      <Compile Include="Assets\RoadArchitect\GSDRigidBody.cs" />
      <Compile Include="Assets\RoadArchitect\GSDRoad.cs" />
      <Compile Include="Assets\RoadArchitect\GSDRoadAutomation.cs" />

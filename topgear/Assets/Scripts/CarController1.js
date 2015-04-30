@@ -2,7 +2,7 @@
 //CarController1.js
 var wheels : Transform[];
  
-var enginePower=150.0;
+var enginePower=250.0;
  
 var power=0.0;
 var brake=0.0;
@@ -12,7 +12,7 @@ var maxSteer=30.0;
 
 // Set centre of mass towards the engine and downwards
 function Start(){
-    rigidbody.centerOfMass += Vector3(0, -1.0, 0.85);
+    rigidbody.centerOfMass += Vector3(0.95, -1.0, 0.1);
 }
 
 //apply force from top to stop car from flipping over

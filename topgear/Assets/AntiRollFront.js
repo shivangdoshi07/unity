@@ -3,7 +3,7 @@
 // AntiRoll script for Front Wheel Axle
 var WheelL : WheelCollider;
 var WheelR : WheelCollider;
-var AntiRoll = 5000.0;
+var AntiRoll = 500.0;
  
 function FixedUpdate ()
     {
