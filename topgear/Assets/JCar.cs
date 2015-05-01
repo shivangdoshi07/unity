@@ -53,9 +53,33 @@ public class JCar : MonoBehaviour {
 	public float torque = 100f; // the base power of the engine (per wheel, and before gears)
 	public float brakeTorque = 2000f; // the power of the braks (per wheel)
 	public float nitrousTorque = 150f; //toruque when 'n' is pressed
+	public bool enableNitrous = false;
+	public bool enableGodMode = false;
+	int bonusNitroTimeCount = 1000;
+	int bonusGodModeTimeCount = 1000;
 	public float wheelWeight = 3f; // the weight of a wheel
 	public Vector3 shiftCentre = new Vector3(0.0f, -0.25f, 0.0f); // offset of centre of mass
-	
+
+	//Speed-o-meter variable
+	public Texture2D dialTex;
+	public Texture2D needleTex;
+	public Vector2 dialPos;
+	public float topSpeed=0;
+	public float stopAngle=0;
+	public float topSpeedAngle=0;
+	public float speed=0;
+
+	//Health-meter variable
+	public Texture2D healthDialTex;
+	public Texture2D healthNeedleTex;
+	public Vector2 healthDialPos;
+	public float healthTopValue=0;
+	public float healthStopAngle=0;
+	public float healthTopValueAngle=0;
+	public float healthValue=0;
+	public float decayValue = 0.01f;
+
+
 	public float maxSteerAngle = 30.0f; // max angle of steering wheels
 	public JWheelDrive wheelDrive = JWheelDrive.Front; // which wheels are powered
 	
@@ -233,10 +257,15 @@ public class JCar : MonoBehaviour {
 	}
 
 	public void nitrousEnabled(){
-		if (Input.GetKey (KeyCode.LeftControl)) {
+		if (Input.GetKey (KeyCode.LeftControl) || enableNitrous) {
 			torque = nitrousTorque;
 		} else {
 			torque = 55.0f; //initial value
+		}
+		if (enableNitrous && bonusNitroTimeCount > 0) {
+			bonusNitroTimeCount--;
+		} else {
+			enableNitrous = false;
 		}
 	}
 	
@@ -311,6 +340,15 @@ public class JCar : MonoBehaviour {
 			if (col.GetGroundHit(out hit)) {
 				lp.y -= Vector3.Dot(w.transform.position - hit.point, transform.up) - col.radius;
 				floorContact = floorContact || (w.motor);
+				if(hit.collider.gameObject.name == "Terrain"){
+					if(healthValue > 0 && !enableGodMode)
+						healthValue = healthValue - decayValue;
+					if(enableGodMode && bonusGodModeTimeCount > 0){
+						bonusGodModeTimeCount--;
+					}else{
+						enableGodMode = false;
+					}
+				}
 			}
 			else {
 				lp.y = w.startPos.y - suspensionDistance;
@@ -360,6 +398,7 @@ public class JCar : MonoBehaviour {
 			
 			// set steering angle
 			col.steerAngle = steer * w.maxSteer;
+
 		}
 		
 		// if we have an audiosource (motorsound) adjust pitch using rpm        
@@ -381,20 +420,84 @@ public class JCar : MonoBehaviour {
 				audioSource.Stop();
 			}
 		}
+		rigidbody.AddForce(-transform.up * rigidbody.velocity.magnitude);
 	}
-	
+
 	public void OnGUI() {
 		if (checkForActive.active) {
 			// calculate actual speed in Km/H (SI metrics rule, so no inch, yard, foot,
 			// stone, or other stupid length measure!)
-			float speed = rigidbody.velocity.magnitude * 3.6f;
+			speed = rigidbody.velocity.magnitude * 3.6f;
+
+			// message to display
+			//string msg = "Speed " + speed.ToString("f0") + "Km/H, " + motorRPM.ToString("f0") + "RPM, gear " + currentGear; //  + " torque " + newTorque.ToString("f2") + ", efficiency " + table[index].ToString("f2");
+			string msg = "Speed " + speed.ToString("f0") + "Km/H";
+			// Speedo meter
+			GUI.DrawTexture( new Rect(dialPos.x, dialPos.y, dialTex.width, dialTex.height), dialTex);
+			Vector2 centre= new Vector2((dialPos.x + dialTex.width) / 2, (dialPos.y + dialTex.height) / 2);
+			Matrix4x4 savedMatrix= GUI.matrix;
+			float speedFraction= speed / topSpeed;
+			float needleAngle= Mathf.Lerp(stopAngle, topSpeedAngle, speedFraction);
+			GUIUtility.RotateAroundPivot(needleAngle, centre);
+			GUI.DrawTexture( new Rect(centre.x, centre.y - needleTex.height / 2, needleTex.width, needleTex.height), needleTex);
+			GUI.matrix = savedMatrix;
+
+			if(enableNitrous){
+				GUILayout.BeginArea(new Rect(centre.x - 65, centre.y + 20, 130, 80), GUI.skin.window);
+				GUILayout.Label("Nitro boost: On");
+			}else{
+				GUILayout.BeginArea(new Rect(centre.x - 65, centre.y + 20, 130, 40), GUI.skin.window);
+			}
+			GUILayout.Label(msg);
+			GUILayout.EndArea();
+
+
+			// Health Meter
+
 			
 			// message to display
-			string msg = "Speed " + speed.ToString("f0") + "Km/H, " + motorRPM.ToString("f0") + "RPM, gear " + currentGear; //  + " torque " + newTorque.ToString("f2") + ", efficiency " + table[index].ToString("f2");
-			
-			GUILayout.BeginArea(new Rect(Screen.width -250 - 32, 32, 250, 40), GUI.skin.window);
+			//string msg = "Speed " + speed.ToString("f0") + "Km/H, " + motorRPM.ToString("f0") + "RPM, gear " + currentGear; //  + " torque " + newTorque.ToString("f2") + ", efficiency " + table[index].ToString("f2");
+			msg = "Health " + Mathf.CeilToInt(healthValue).ToString("f0") + "%";
+			// Speedo meter
+			GUI.DrawTexture( new Rect(Screen.width - healthDialTex.width - 5, healthDialPos.y, healthDialTex.width, healthDialTex.height), healthDialTex);
+			Vector2 healthCentre= new Vector2((Screen.width - (healthDialTex.width / 2)), (healthDialPos.y + healthDialTex.height) / 2);
+			Matrix4x4 healthSavedMatrix= GUI.matrix;
+			float valueFraction= healthValue / healthTopValue;
+			float healthNeedleAngle= Mathf.Lerp(healthStopAngle, healthTopValueAngle, valueFraction);
+			GUIUtility.RotateAroundPivot(healthNeedleAngle, healthCentre);
+			GUI.DrawTexture( new Rect(healthCentre.x, healthCentre.y - healthNeedleTex.height / 2, healthNeedleTex.width, healthNeedleTex.height), healthNeedleTex);
+			GUI.matrix = healthSavedMatrix;
+
+			if(enableGodMode){
+				GUILayout.BeginArea(new Rect(healthCentre.x - 65, healthCentre.y + 20, 130, 80), GUI.skin.window);
+				GUILayout.Label("God Mode: ON");
+			}else{
+				GUILayout.BeginArea(new Rect(healthCentre.x - 65, healthCentre.y + 20, 130, 40), GUI.skin.window);
+			}
 			GUILayout.Label(msg);
 			GUILayout.EndArea();
 		}
 	}
+
+	public void changeHealth(float value){
+		if (healthValue <= 100) {
+			if( healthValue + value >= healthTopValue)
+				healthValue = healthTopValue;
+			else
+				healthValue = healthValue + value;
+		}
+	}
+
+	public void enableNitrousBoost(bool value){
+		if (value)
+			bonusNitroTimeCount = 1000;
+		enableNitrous = value;
+	}
+
+	public void enableGodM(bool value){
+		if (value)
+			bonusGodModeTimeCount = 1000;
+		enableGodMode = value;
+	}
+
 }

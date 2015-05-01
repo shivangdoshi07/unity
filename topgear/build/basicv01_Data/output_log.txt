@@ -18,14 +18,10 @@ Platform assembly: D:\projects\unity\topgear\build\basicv01_Data\Managed\Assembl
 Loading D:\projects\unity\topgear\build\basicv01_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
 Platform assembly: D:\projects\unity\topgear\build\basicv01_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading D:\projects\unity\topgear\build\basicv01_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.186 seconds
+- Completed reload, in  0.199 seconds
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 XInput1_3.dll not found.
 <RI> Input initialized.
 Platform assembly: D:\projects\unity\topgear\build\basicv01_Data\Managed\System.Core.dll (this message is harmless)
 WARNING: Shader Unsupported: 'Hidden/TerrainEngine/Details/BillboardWavingDoublePass' - Pass '' shader state not supported
-The referenced script on this Behaviour is missing!
- 
-(Filename:  Line: 1769)
-

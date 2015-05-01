@@ -49,6 +49,7 @@
      <Compile Include="Assets\AntiRollFront.js" />
      <Compile Include="Assets\AntiRollRear.js" />
      <Compile Include="Assets\Scripts\CarController1.js" />
+     <Compile Include="Assets\SpeedoPrefab\Speedo.js" />
      <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
      <None Include="Assets\RoadArchitect\Shaders\GSDTransparentWithShadowsZ.shader" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />

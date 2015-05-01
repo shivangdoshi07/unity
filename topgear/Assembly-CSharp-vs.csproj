@@ -65,6 +65,7 @@
      <Compile Include="Assets\RoadArchitect\Spline\GSDSplineF.cs" />
      <Compile Include="Assets\RoadArchitect\Spline\GSDSplineI.cs" />
      <Compile Include="Assets\RoadArchitect\Spline\GSDSplineN.cs" />
+     <Compile Include="Assets\Scripts\CollectibleController.cs" />
      <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
      <None Include="Assets\RoadArchitect\Shaders\GSDTransparentWithShadowsZ.shader" />
      <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
